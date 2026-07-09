@@ -46,6 +46,9 @@ app.post('/api/publicaciones', (req, res) => {
     res.status(201).json(nuevaPost);
 });
 
+// Asegúrate de tener esto en tu server.js:
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
     console.log(`Servidor de la Beta corriendo en http://localhost:${PORT}`);
 });
