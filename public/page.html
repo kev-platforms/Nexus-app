@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus - Prototipo de Red Social Ética</title>
+    <style>
+        /* Paleta de colores psicológica para transmitir calma y seguridad */
+        :root {
+            --bg-color: #f4f7f6;      /* Gris verdoso muy claro y relajante */
+            --card-bg: #ffffff;       /* Blanco puro para los contenedores */
+            --primary: #2d6a4f;       /* Verde mate profundo para elementos principales */
+            --secondary: #40916c;     /* Verde medio para interacciones y botones */
+            --text-main: #1b4332;     /* Texto oscuro pero suave (evita el negro puro) */
+            --text-muted: #52b788;    /* Verde claro para detalles y textos secundarios */
+            --border-color: #d8f3dc;  /* Bordes suaves */
+            --accent-blue: #4a90e2;   /* Azul mate para el modo conversación */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+        }
+
+        .username {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .time {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .post-content {
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+        }
+
+        .values-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: var(--border-color);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .actions-bar {
+            display: flex;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 0;
+            margin-bottom: 25px;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--secondary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: var(--bg-color);
+        }
+
+        /* Sección de Comentarios Constructivos */
+        .comments-section h3 {
+            font-size: 0.9rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .comment {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .comment-user {
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge {
+            background-color: #fff3cd;
+            color: #856404;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #ffeeba;
+        }
+
+        /* Alerta de Interacción Pausada */
+        .modal-dialog {
+            background-color: #e8f4fd;
+            border: 1px solid var(--accent-blue);
+            color: #1d4ed8;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: none; /* Se activa dinámicamente con JS */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>NEXUS</h1>
+        <div>
+            <span style="font-size: 0.9rem; font-weight: 500; color: var(--primary);">Espacio Seguro</span>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- Tarjeta de Publicación Principal -->
+        <div class="card">
+            
+            <div class="post-header">
+                <div class="user-info">
+                    <div class="avatar"></div>
+                    <div>
+                        <div class="username">@sofia_arte</div>
+                        <div class="time">Hace 2 horas</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-content">
+                Hoy logré terminar mi primera pintura al óleo tras meses de práctica diaria. El proceso tuvo momentos muy difíciles donde quise rendirme, pero la constancia valió por completo la pena. ¡No dejen de intentar lo que les apasiona!
+            </div>
+
+            <!-- Valores destacados por la comunidad (Reemplazo de contadores de likes) -->
+            <div class="values-tags" id="tags-container">
+                <span class="tag">✨ Inspira</span>
+                <span class="tag">🌱 Aporta</span>
+            </div>
+
+            <!-- Barra de Acciones Éticas -->
+            <div class="actions-bar">
+                <button class="action-btn" onclick="agregarValor()">+ Reaccionar con Valor</button>
+                <button class="action-btn" onclick="activarConversacion()">💬 Conversar (Pausado)</button>
+            </div>
+
+            <!-- Zona de Interacción y Comentarios -->
+            <div class="comments-section">
+                <!-- Recordatorio Dinámico de Empatía -->
+                <div class="modal-dialog" id="intercom-alert">
+                    <strong>Modo de Diálogo Activo:</strong> Estás entrando a un espacio de conversación. Lee para comprender profundamente, no para competir. El sistema procesará tu mensaje con IA antes de publicarlo para asegurar que no contenga ataques personales.
+                </div>
+
+                <h3>Respuestas Constructivas Destacadas</h3>
+                
+                <div class="comment">
+                    <div class="comment-user">
+                        @carlos_m 
+                        <span class="badge">🏅 Amabilidad</span>
+                    </div>
+                    <div>Los colores que seleccionaste transmiten una paz increíble. ¡Muchísimas felicidades por la constancia y el resultado final!</div>
+                </div>
+
+                <div class="comment">
+                    <div class="comment-user">@elena_creativa</div>
+                    <div>Ver tu progreso me motiva a retomar mis proyectos de acuarela que dejé pausados el año pasado. Gracias por compartir tu vulnerabilidad en el proceso.</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+<script>
+  // 2. Conectas tu proyecto con las credenciales gratuitas que te da Supabase
+  const SUPABASE_URL = "https://qjzxeonjjkzqyqjizhnf.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_8KR_R7KIDuc9q8Fp2yeYpw_-rwJmDbw";
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // 3. Función dinámica para GUARDAR un post en la nube (Backend real)
+  async function createPost(e) {
+      e.preventDefault();
+      const input = document.getElementById('new-post-text');
+      
+      // Inserta el post directamente en la base de datos de Supabase
+      const { data, error } = await supabase
+        .from('publicaciones')
+        .insert([
+          { user: currentUser.username, text: input.value, values_count: 0 }
+        ]);
+
+      if (!error) {
+          input.value = '';
+          renderFeed(); // Recarga el feed para ver lo nuevo
+      }
+  }
+
+  // 4. Función dinámica para LEER los posts de TODOS los usuarios de internet
+  async function renderFeed() {
+      const container = document.getElementById('feed-container');
+      container.innerHTML = '';
+
+      // Trae todas las publicaciones guardadas por cualquier persona en internet
+      const { data: publicaciones, error } = await supabase
+        .from('publicaciones')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (publicaciones) {
+          publicaciones.forEach(post => {
+              // Aquí usas tu misma lógica de diseño (.card) para pintarlos en pantalla
+              container.appendChild(createPostCard(post));
+          });
+      }
+  }
+</script>
+    <script>
+        // Simulación interactiva simple
+        function agregarValor() {
+            const container = document.getElementById('tags-container');
+            
+            // Evita duplicar el tag simulado
+            if (!document.getElementById('custom-tag')) {
+                const nuevoTag = document.createElement('span');
+                nuevoTag.className = 'tag';
+                nuevoTag.id = 'custom-tag';
+                nuevoTag.style.backgroundColor = '#d1e7dd';
+                nuevoTag.innerText = '💡 Educa';
+                container.appendChild(nuevoTag);
+            }
+        }
+
+        function activarConversacion() {
+            const alerta = document.getElementById('intercom-alert');
+            // Alterna la visibilidad del aviso de moderación ética
+            if (alerta.style.display === 'block') {
+                alerta.style.display = 'none';
+            } else {
+                alerta.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
