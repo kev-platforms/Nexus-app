@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus - Mi Perfil Seguro</title>
+    <style>
+        /* Paleta de colores psicológica idéntica para transmitir calma y seguridad */
+        :root {
+            --bg-color: #f4f7f6;      /* Gris verdoso muy claro y relajante */
+            --card-bg: #ffffff;       /* Blanco puro para los contenedores */
+            --primary: #2d6a4f;       /* Verde mate profundo para elementos principales */
+            --secondary: #40916c;     /* Verde medio para interacciones y botones */
+            --text-main: #1b4332;     /* Texto oscuro pero suave */
+            --text-muted: #52b788;    /* Verde claro para detalles y textos secundarios */
+            --border-color: #d8f3dc;  /* Bordes suaves */
+            --accent-blue: #4a90e2;   /* Azul mate para el modo conversación */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        /* Cabecera del Perfil */
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            margin-bottom: 15px;
+            border: 3px solid var(--border-color);
+        }
+
+        .profile-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .profile-username {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin: 2px 0 15px 0;
+        }
+
+        .profile-bio {
+            font-size: 1rem;
+            color: var(--text-main);
+            max-width: 450px;
+            margin-bottom: 20px;
+        }
+
+        /* Estadísticas Éticas (En lugar de seguidores masivos) */
+        .ethical-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 0;
+            margin-bottom: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Sección de Publicaciones Propias */
+        .section-title {
+            font-size: 0.9rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 30px 0 15px 0;
+        }
+
+        /* Estilos de las publicaciones guardadas/propias */
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mini-avatar {
+            width: 35px;
+            height: 35px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+        }
+
+        .username {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .time {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .post-content {
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+        }
+
+        .values-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background-color: var(--border-color);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Botón de configuración o edición */
+        .edit-btn {
+            background: none;
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .edit-btn:hover {
+            background-color: var(--border-color);
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>NEXUS</h1>
+        <div>
+            <span style="font-size: 0.9rem; font-weight: 500; color: var(--primary);">Espacio Seguro</span>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <div class="card">
+            <div class="profile-header">
+                <div class="profile-avatar"></div>
+                <h2 class="profile-name">Sofía Alarcón</h2>
+                <div class="profile-username">@sofia_arte</div>
+                
+                <p class="profile-bio">
+                    Explorando el óleo, las texturas y el crecimiento paciente. Creo que el arte sana y conecta desde la honestidad. 🌿✨
+                </p>
+
+                <button class="edit-btn" onclick="editarPerfil()">Ajustar Espacio Personal</button>
+            </div>
+
+            <div class="ethical-stats">
+                <div class="stat-item">
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Aportes Compartidos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">118</div>
+                    <div class="stat-label">Valores Recibidos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">Diálogo Constructivo</div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Mis Reflexiones Recientes</h3>
+
+        <div class="card">
+            <div class="post-header">
+                <div class="user-info">
+                    <div class="mini-avatar"></div>
+                    <div>
+                        <div class="username">@sofia_arte</div>
+                        <div class="time">Hace 2 horas</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-content">
+                Hoy logré terminar mi primera pintura al óleo tras meses de práctica diaria. El proceso tuvo momentos muy difíciles donde quise rendirme, pero la constancia valió por completo la pena. ¡No dejen de intentar lo que les apasiona!
+            </div>
+
+            <div class="values-tags">
+                <span class="tag">✨ Inspira (42)</span>
+                <span class="tag">🌱 Aporta (26)</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="post-header">
+                <div class="user-info">
+                    <div class="mini-avatar"></div>
+                    <div>
+                        <div class="username">@sofia_arte</div>
+                        <div class="time">Hace 5 días</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-content">
+                ¿Cómo manejan la frustración cuando un lienzo no queda como lo imaginaban? Yo hoy decidí alejarme unas horas, tomar un té y respirar. A veces la pausa es parte de la obra.
+            </div>
+
+            <div class="values-tags">
+                <span class="tag">💡 Educa (18)</span>
+                <span class="tag">🤝 Empatía (32)</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function editarPerfil() {
+            alert('Abriendo ajustes de bienestar y privacidad... Aquí puedes gestionar tus recordatorios de tiempo en pantalla y preferencias de moderación.');
+        }
+    </script>
+</body>
+</html>
