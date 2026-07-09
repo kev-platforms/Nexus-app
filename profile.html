@@ -292,6 +292,49 @@
 
     </div>
 
+<script>
+  // 2. Conectas tu proyecto con las credenciales gratuitas que te da Supabase
+  const SUPABASE_URL = "https://qjzxeonjjkzqyqjizhnf.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_8KR_R7KIDuc9q8Fp2yeYpw_-rwJmDbw";
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // 3. Función dinámica para GUARDAR un post en la nube (Backend real)
+  async function createPost(e) {
+      e.preventDefault();
+      const input = document.getElementById('new-post-text');
+      
+      // Inserta el post directamente en la base de datos de Supabase
+      const { data, error } = await supabase
+        .from('publicaciones')
+        .insert([
+          { user: currentUser.username, text: input.value, values_count: 0 }
+        ]);
+
+      if (!error) {
+          input.value = '';
+          renderFeed(); // Recarga el feed para ver lo nuevo
+      }
+  }
+
+  // 4. Función dinámica para LEER los posts de TODOS los usuarios de internet
+  async function renderFeed() {
+      const container = document.getElementById('feed-container');
+      container.innerHTML = '';
+
+      // Trae todas las publicaciones guardadas por cualquier persona en internet
+      const { data: publicaciones, error } = await supabase
+        .from('publicaciones')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (publicaciones) {
+          publicaciones.forEach(post => {
+              // Aquí usas tu misma lógica de diseño (.card) para pintarlos en pantalla
+              container.appendChild(createPostCard(post));
+          });
+      }
+  }
+</script>
     <script>
         function editarPerfil() {
             alert('Abriendo ajustes de bienestar y privacidad... Aquí puedes gestionar tus recordatorios de tiempo en pantalla y preferencias de moderación.');
