@@ -54,7 +54,7 @@ app.post('/api/publicaciones/:id/valorar', (req, res) => {
 });
 
 // Enrutar cualquier otra petición al index.html
-app.get('*', (req, res) => {
+app.get('(.*)', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
