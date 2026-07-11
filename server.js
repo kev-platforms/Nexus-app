@@ -1,51 +1,63 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 
-// Middleware para entender formato JSON y permitir conexiones
 app.use(express.json());
 app.use(cors());
 
-// Servir tus archivos de diseño (HTML, CSS, JS del cliente)
-app.use(express.static('public'));
+// Servir archivos estáticos de la carpeta public
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Base de datos simulada en el servidor (temporal antes de conectar la DB definitiva)
-let usuarios = [];
+// "Base de datos" temporal en el servidor
 let publicaciones = [
-    { id: 1, user: '@sofia_arte', text: 'Hoy logré terminar mi primera pintura al óleo...', tags: ['✨ Inspira'], valuesCount: 42 }
+    { id: 1, user: '@sofia_arte', text: 'Hoy logré terminar mi primera pintura al óleo tras meses de práctica diaria. La constancia valió la pena. ✨', tags: ['✨ Inspira', '🌱 Aporta'], valuesCount: 42, time: 'Hace 2 horas' },
+    { id: 2, user: '@lucas_verde', text: 'Pequeño recordatorio para hoy: desactiva las notificaciones un par de horas. Tu mente merece un respiro tranquilo. 🌿', tags: ['🤝 Empatía'], valuesCount: 15, time: 'Hace 5 horas' }
 ];
 
-// RUTAS (API Endpoints)
+// RUTAS DE LA API
 
-// 1. Registro de usuario
-app.post('/api/registro', (req, res) => {
-    const { username, email, password } = req.body;
-    // Aquí se debería encriptar la contraseña (ej. con bcrypt) antes de guardar
-    const nuevoUsuario = { username, email, password };
-    usuarios.push(nuevoUsuario);
-    res.status(201).json({ mensaje: "Usuario registrado con éxito", usuario: { username, email } });
-});
-
-// 2. Obtener todas las publicaciones (Feed)
+// Obtener todas las publicaciones (Feed)
 app.get('/api/publicaciones', (req, res) => {
     res.json(publicaciones);
 });
 
-// 3. Crear una nueva publicación
+// Crear una nueva publicación
 app.post('/api/publicaciones', (req, res) => {
     const { user, text } = req.body;
+    if (!user || !text) {
+        return res.status(400).json({ error: 'Faltan campos requeridos' });
+    }
     const nuevaPost = {
         id: Date.now(),
         user,
         text,
         tags: ['🌱 Aporta'],
-        valuesCount: 0
+        valuesCount: 0,
+        time: 'Hace un momento'
     };
     publicaciones.unshift(nuevaPost);
     res.status(201).json(nuevaPost);
 });
 
+// Reaccionar con valor a una publicación
+app.post('/api/publicaciones/:id/valorar', (req, res) => {
+    const id = parseInt(req.params.id);
+    const post = publicaciones.find(p => p.id === id);
+    if (post) {
+        post.valuesCount += 1;
+        return res.json(post);
+    }
+    res.status(404).json({ error: 'Publicación no encontrada' });
+});
+
+// Enrutar cualquier otra petición al index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 app.listen(PORT, () => {
-    console.log(`Servidor de la Beta corriendo en http://localhost:${PORT}`);
+    console.log(`Servidor de Nexus corriendo en el puerto ${PORT}`);
 });
