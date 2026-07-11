@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus - Red Social Ética</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --primary: #2d6a4f;
+            --secondary: #40916c;
+            --text-main: #1b4332;
+            --text-muted: #52b788;
+            --border-color: #d8f3dc;
+            --accent-blue: #4a90e2;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--primary);
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background-color: var(--border-color);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+
+        /* AUTH SECCIÓN */
+        .tabs { display: flex; border-bottom: 2px solid var(--border-color); margin-bottom: 25px; }
+        .tab-btn { flex: 1; background: none; border: none; padding: 12px; font-size: 1rem; font-weight: 600; color: var(--text-muted); cursor: pointer; }
+        .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); margin-bottom: -2px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--primary); margin-bottom: 5px; }
+        .form-group input, .post-input { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-main); font-size: 1rem; }
+        .submit-btn { width: 100%; background-color: var(--primary); color: white; border: none; padding: 12px; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; margin-top: 10px; }
+        .info-notice { background-color: #e8f4fd; border: 1px solid var(--accent-blue); color: #1d4ed8; padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-top: 15px; }
+
+        /* FEED Y POSTS */
+        .post-creator-box { display: flex; gap: 10px; align-items: flex-end; }
+        .post-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 40px; height: 40px; background-color: var(--secondary); border-radius: 50%; }
+        .username { font-weight: bold; color: var(--primary); }
+        .time { font-size: 0.85rem; color: #666; }
+        .post-content { font-size: 1.05rem; margin-bottom: 15px; }
+        .values-tags { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .tag { background-color: var(--border-color); color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; }
+        .actions-bar { display: flex; border-top: 1px solid var(--border-color); padding-top: 10px; }
+        .action-btn { flex: 1; background: none; border: none; color: var(--secondary); font-size: 0.95rem; font-weight: 600; cursor: pointer; padding: 8px; border-radius: 6px; text-align: center; }
+        .action-btn:hover { background-color: var(--bg-color); }
+
+        /* BÚSQUEDA Y PERFIL */
+        .grid-spaces { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+        .space-item { background-color: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; cursor: pointer; }
+        .profile-header { text-align: center; padding: 10px 0; }
+        .profile-avatar { width: 80px; height: 80px; background-color: var(--secondary); border-radius: 50%; margin: 0 auto 15px auto; }
+        .ethical-stats { display: flex; justify-content: center; gap: 20px; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 15px 0; margin-top: 15px; }
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
+        .stat-label { font-size: 0.75rem; color: #666; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 onclick="navigateTo('home')">NEXUS</h1>
+        <div class="nav-links" id="nav-menu">
+            <button class="nav-btn active" id="nav-home" onclick="navigateTo('home')">🏠 Inicio</button>
+            <button class="nav-btn" id="nav-search" onclick="navigateTo('search')">🔍 Buscar</button>
+            <button class="nav-btn" id="nav-profile" onclick="navigateTo('profile')">👤 Perfil</button>
+            <button class="nav-btn" style="color: #c91818;" onclick="logout()">🚫 Salir</button>
+        </div>
+        <div id="safe-badge"><span style="font-size: 0.9rem; font-weight: 500; color: var(--primary);">Espacio Seguro</span></div>
+    </header>
+
+    <div class="container">
+
+        <div id="view-auth" class="view-section active">
+            <div class="card" style="max-width: 450px; margin: 0 auto;">
+                <div class="tabs">
+                    <button class="tab-btn active" id="tab-login" onclick="switchAuthTab('login')">Iniciar Sesión</button>
+                    <button class="tab-btn" id="tab-register" onclick="switchAuthTab('register')">Crear Cuenta</button>
+                </div>
+                <form id="auth-form" onsubmit="handleAuth(event)">
+                    <div class="form-group" id="group-username" style="display: none;">
+                        <label>Nombre de Usuario</label>
+                        <input type="text" id="auth-user" placeholder="ej. @sofia_arte">
+                    </div>
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" id="auth-email" required placeholder="tu@correo.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="auth-password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="submit-btn" id="auth-submit-btn">Entrar al Espacio</button>
+                </form>
+                <div class="info-notice" id="auth-notice">
+                    <strong>Conexión consciente:</strong> Al ingresar, te comprometes a interactuar desde el respeto y la empatía.
+                </div>
+            </div>
+        </div>
+
+        <div id="view-home" class="view-section">
+            <div class="card">
+                <form onsubmit="createPost(event)" class="post-creator-box">
+                    <div class="avatar"></div>
+                    <input type="text" id="new-post-text" class="post-input" required placeholder="¿Qué reflexión consciente tienes hoy?">
+                    <button type="submit" class="submit-btn" style="width: auto; margin: 0; padding: 12px 20px;">Publicar</button>
+                </form>
+            </div>
+            <div id="feed-container"></div>
+        </div>
+
+        <div id="view-search" class="view-section">
+            <div class="card">
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="search-input" class="post-input" placeholder="Buscar reflexiones por palabras clave..." oninput="filterPosts()">
+                </div>
+                <h3>Espacios Temáticos</h3>
+                <div class="grid-spaces">
+                    <div class="space-item" onclick="setSearch('Bienestar')"><strong>🌱 Bienestar Mental</strong><br><small>Calma y balance diario.</small></div>
+                    <div class="space-item" onclick="setSearch('Arte')"><strong>🎨 Creatividad Humana</strong><br><small>Progresos artísticos honestos.</small></div>
+                </div>
+            </div>
+            <div id="search-results"></div>
+        </div>
+
+        <div id="view-profile" class="view-section">
+            <div class="card">
+                <div class="profile-header">
+                    <div class="profile-avatar"></div>
+                    <h2 class="profile-name" id="profile-display-name">Usuario</h2>
+                    <div style="color: var(--text-muted); font-weight: bold; margin-bottom: 10px;" id="profile-display-username">@usuario</div>
+                    <p>Miembro de la red social ética Nexus. Construyendo interacciones más humanas.</p>
+                    <div class="ethical-stats">
+                        <div class="stat-item"><div class="stat-value" id="stat-posts">0</div><div class="stat-label">Aportes</div></div>
+                        <div class="stat-item"><div class="stat-value" id="stat-values">0</div><div class="stat-label">Valores Recibidos</div></div>
+                    </div>
+                </div>
+            </div>
+            <h3 style="color: var(--primary); text-transform: uppercase; font-size: 0.9rem;">Mis Publicaciones</h3>
+            <div id="profile-posts-container"></div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        let allPosts = [];
+        let currentAuthMode = 'login';
+
+        window.onload = function() {
+            if (currentUser) {
+                loginSuccess();
+            } else {
+                navigateTo('auth');
+            }
+        };
+
+        function navigateTo(view) {
+            if (!currentUser && view !== 'auth') return;
+            
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`view-${view}`).classList.add('active');
+            if (view !== 'auth') {
+                document.getElementById(`nav-${view}`).classList.add('active');
+            }
+
+            if (view === 'home') loadFeed();
+            if (view === 'profile') loadProfile();
+            if (view === 'search') filterPosts();
+        }
+
+        function switchAuthTab(mode) {
+            currentAuthMode = mode;
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            if (mode === 'login') {
+                document.getElementById('tab-login').classList.add('active');
+                document.getElementById('group-username').style.display = 'none';
+                document.getElementById('auth-submit-btn').innerText = 'Entrar al Espacio';
+            } else {
+                document.getElementById('tab-register').classList.add('active');
+                document.getElementById('group-username').style.display = 'block';
+                document.getElementById('auth-submit-btn').innerText = 'Comenzar en Nexus';
+            }
+        }
+
+        function handleAuth(e) {
+            e.preventDefault();
+            const username = document.getElementById('auth-user').value || '@anonimo';
+            currentUser = { username: username.startsWith('@') ? username : '@' + username };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            loginSuccess();
+        }
+
+        function loginSuccess() {
+            document.getElementById('nav-menu').style.display = 'flex';
+            document.getElementById('safe-badge').style.display = 'none';
+            navigateTo('home');
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            document.getElementById('nav-menu').style.display = 'none';
+            document.getElementById('safe-badge').style.display = 'block';
+            switchAuthTab('login');
+            navigateTo('auth');
+        }
+
+        async function loadFeed() {
+            const response = await fetch('/api/publicaciones');
+            allPosts = await response.json();
+            
+            const container = document.getElementById('feed-container');
+            container.innerHTML = '';
+            allPosts.forEach(post => container.appendChild(createPostCard(post)));
+        }
+
+        function createPostCard(post) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="post-header">
+                    <div class="user-info">
+                        <div class="avatar"></div>
+                        <div>
+                            <div class="username">${post.user}</div>
+                            <div class="time">${post.time}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-content">${post.text}</div>
+                <div class="values-tags">
+                    ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    <span class="tag" style="background-color: #ffeeba; color: #856404;">✨ Valores: ${post.valuesCount}</span>
+                </div>
+                <div class="actions-bar">
+                    <button class="action-btn" onclick="addValue(${post.id})">🌿 + Valorar</button>
+                    <button class="action-btn" onclick="alert('Moderación ética activa.')">💬 Conversar</button>
+                </div>
+            `;
+            return card;
+        }
+
+        async function createPost(e) {
+            e.preventDefault();
+            const input = document.getElementById('new-post-text');
+            
+            await fetch('/api/publicaciones', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user: currentUser.username, text: input.value })
+            });
+            input.value = '';
+            loadFeed();
+        }
+
+        async function addValue(id) {
+            await fetch(`/api/publicaciones/${id}/valorar`, { method: 'POST' });
+            if (document.getElementById('view-home').classList.contains('active')) loadFeed();
+            if (document.getElementById('view-profile').classList.contains('active')) loadProfile();
+            if (document.getElementById('view-search').classList.contains('active')) filterPosts();
+        }
+
+        function filterPosts() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const container = document.getElementById('search-results');
+            container.innerHTML = '';
+            const filtered = allPosts.filter(p => p.text.toLowerCase().includes(query));
+            filtered.forEach(post => container.appendChild(createPostCard(post)));
+        }
+
+        function setSearch(keyword) {
+            document.getElementById('search-input').value = keyword;
+            filterPosts();
+        }
+
+        function loadProfile() {
+            document.getElementById('profile-display-username').innerText = currentUser.username;
+            document.getElementById('profile-display-name').innerText = currentUser.username.replace('@', '');
+            
+            const myPosts = allPosts.filter(p => p.user === currentUser.username);
+            document.getElementById('stat-posts').innerText = myPosts.length;
+            document.getElementById('stat-values').innerText = myPosts.reduce((acc, p) => acc + p.valuesCount, 0);
+
+            const container = document.getElementById('profile-posts-container');
+            container.innerHTML = '';
+            if (myPosts.length === 0) {
+                container.innerHTML = '<p style="color:gray; text-align:center;">Aún no has compartido reflexiones.</p>';
+            } else {
+                myPosts.forEach(post => container.appendChild(createPostCard(post)));
+            }
+        }
+    </script>
+</body>
+</html>
