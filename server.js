@@ -53,8 +53,9 @@ app.post('/api/publicaciones/:id/valorar', (req, res) => {
     res.status(404).json({ error: 'Publicación no encontrada' });
 });
 
-// Enrutar cualquier otra petición al index.html
-app.get('(.*)', (req, res) => {
+// Usamos app.use en lugar de app.get y removemos cualquier comodín.
+// Esto atrapará cualquier ruta que no haya hecho match con las anteriores.
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
