@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus - Red Social Ética</title>
+    <title>Nexus</title>
+    
     <style>
         :root {
             --bg-color: #f4f7f6;
@@ -84,39 +85,23 @@
         .view-section { display: none; }
         .view-section.active { display: block; }
 
-        /* AUTH SECCIÓN */
         .tabs { display: flex; border-bottom: 2px solid var(--border-color); margin-bottom: 25px; }
         .tab-btn { flex: 1; background: none; border: none; padding: 12px; font-size: 1rem; font-weight: 600; color: var(--text-muted); cursor: pointer; }
-        .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); margin-bottom: -2px; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--primary); margin-bottom: 5px; }
         .form-group input, .post-input { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-color); color: var(--text-main); font-size: 1rem; }
         .submit-btn { width: 100%; background-color: var(--primary); color: white; border: none; padding: 12px; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; margin-top: 10px; }
-        .info-notice { background-color: #e8f4fd; border: 1px solid var(--accent-blue); color: #1d4ed8; padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-top: 15px; }
 
-        /* FEED Y POSTS */
+        /* POSTS */
         .post-creator-box { display: flex; gap: 10px; align-items: flex-end; }
         .post-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .user-info { display: flex; align-items: center; gap: 10px; }
-        .avatar { width: 40px; height: 40px; background-color: var(--secondary); border-radius: 50%; }
         .username { font-weight: bold; color: var(--primary); }
-        .time { font-size: 0.85rem; color: #666; }
         .post-content { font-size: 1.05rem; margin-bottom: 15px; }
         .values-tags { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
         .tag { background-color: var(--border-color); color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; }
         .actions-bar { display: flex; border-top: 1px solid var(--border-color); padding-top: 10px; }
         .action-btn { flex: 1; background: none; border: none; color: var(--secondary); font-size: 0.95rem; font-weight: 600; cursor: pointer; padding: 8px; border-radius: 6px; text-align: center; }
         .action-btn:hover { background-color: var(--bg-color); }
-
-        /* BÚSQUEDA Y PERFIL */
-        .grid-spaces { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-        .space-item { background-color: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; cursor: pointer; }
-        .profile-header { text-align: center; padding: 10px 0; }
-        .profile-avatar { width: 80px; height: 80px; background-color: var(--secondary); border-radius: 50%; margin: 0 auto 15px auto; }
-        .ethical-stats { display: flex; justify-content: center; gap: 20px; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 15px 0; margin-top: 15px; }
-        .stat-item { text-align: center; }
-        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
-        .stat-label { font-size: 0.75rem; color: #666; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -136,165 +121,95 @@
 
         <div id="view-auth" class="view-section active">
             <div class="card" style="max-width: 450px; margin: 0 auto;">
-                <div class="tabs">
-                    <button class="tab-btn active" id="tab-login" onclick="switchAuthTab('login')">Iniciar Sesión</button>
-                    <button class="tab-btn" id="tab-register" onclick="switchAuthTab('register')">Crear Cuenta</button>
-                </div>
+                <div class="tabs"><button class="tab-btn" style="color: var(--primary); border-bottom: 3px solid var(--primary);">Acceder a la Beta</button></div>
                 <form id="auth-form" onsubmit="handleAuth(event)">
-                    <div class="form-group" id="group-username" style="display: none;">
-                        <label>Nombre de Usuario</label>
-                        <input type="text" id="auth-user" placeholder="ej. @sofia_arte">
-                    </div>
                     <div class="form-group">
-                        <label>Correo Electrónico</label>
-                        <input type="email" id="auth-email" required placeholder="tu@correo.com">
+                        <label>Elige tu Nombre de Usuario</label>
+                        <input type="text" id="auth-user" required placeholder="ej. @sofia_arte">
                     </div>
-                    <div class="form-group">
-                        <label>Contraseña</label>
-                        <input type="password" id="auth-password" required placeholder="••••••••">
-                    </div>
-                    <button type="submit" class="submit-btn" id="auth-submit-btn">Entrar al Espacio</button>
+                    <button type="submit" class="submit-btn">Entrar a la Comunidad</button>
                 </form>
-                <div class="info-notice" id="auth-notice">
-                    <strong>Conexión consciente:</strong> Al ingresar, te comprometes a interactuar desde el respeto y la empatía.
-                </div>
             </div>
         </div>
 
         <div id="view-home" class="view-section">
             <div class="card">
                 <form onsubmit="createPost(event)" class="post-creator-box">
-                    <div class="avatar"></div>
+                    <div style="width: 40px; height: 40px; background: var(--secondary); border-radius: 50%;"></div>
                     <input type="text" id="new-post-text" class="post-input" required placeholder="¿Qué reflexión consciente tienes hoy?">
                     <button type="submit" class="submit-btn" style="width: auto; margin: 0; padding: 12px 20px;">Publicar</button>
                 </form>
             </div>
-            <div id="feed-container"></div>
+            <div id="feed-container">Conectando con el universo de Nexus...</div>
         </div>
 
         <div id="view-search" class="view-section">
             <div class="card">
-                <div style="margin-bottom: 20px;">
-                    <input type="text" id="search-input" class="post-input" placeholder="Buscar reflexiones por palabras clave..." oninput="filterPosts()">
-                </div>
-                <h3>Espacios Temáticos</h3>
-                <div class="grid-spaces">
-                    <div class="space-item" onclick="setSearch('Bienestar')"><strong>🌱 Bienestar Mental</strong><br><small>Calma y balance diario.</small></div>
-                    <div class="space-item" onclick="setSearch('Arte')"><strong>🎨 Creatividad Humana</strong><br><small>Progresos artísticos honestos.</small></div>
-                </div>
+                <input type="text" id="search-input" class="post-input" placeholder="Buscar por palabra clave..." oninput="filterPosts()">
             </div>
             <div id="search-results"></div>
         </div>
 
         <div id="view-profile" class="view-section">
-            <div class="card">
-                <div class="profile-header">
-                    <div class="profile-avatar"></div>
-                    <h2 class="profile-name" id="profile-display-name">Usuario</h2>
-                    <div style="color: var(--text-muted); font-weight: bold; margin-bottom: 10px;" id="profile-display-username">@usuario</div>
-                    <p>Miembro de la red social ética Nexus. Construyendo interacciones más humanas.</p>
-                    <div class="ethical-stats">
-                        <div class="stat-item"><div class="stat-value" id="stat-posts">0</div><div class="stat-label">Aportes</div></div>
-                        <div class="stat-item"><div class="stat-value" id="stat-values">0</div><div class="stat-label">Valores Recibidos</div></div>
-                    </div>
-                </div>
+            <div class="card" style="text-align: center;">
+                <div style="width:70px; height:70px; background:var(--secondary); border-radius:50%; margin:0 auto 10px;"></div>
+                <h2 id="profile-display-username">@KevinAndres</h2>
+                <p>Miembro fundador de la Beta de Nexus.</p>
             </div>
-            <h3 style="color: var(--primary); text-transform: uppercase; font-size: 0.9rem;">Mis Publicaciones</h3>
             <div id="profile-posts-container"></div>
         </div>
 
     </div>
 
-<script>
-  // 2. Conectas tu proyecto con las credenciales gratuitas que te da Supabase
-  const SUPABASE_URL = "https://qjzxeonjjkzqyqjizhnf.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_8KR_R7KIDuc9q8Fp2yeYpw_-rwJmDbw";
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, increment, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  // 3. Función dinámica para GUARDAR un post en la nube (Backend real)
-  async function createPost(e) {
-      e.preventDefault();
-      const input = document.getElementById('new-post-text');
-      
-      // Inserta el post directamente en la base de datos de Supabase
-      const { data, error } = await supabase
-        .from('publicaciones')
-        .insert([
-          { user: currentUser.username, text: input.value, values_count: 0 }
-        ]);
-
-      if (!error) {
-          input.value = '';
-          renderFeed(); // Recarga el feed para ver lo nuevo
-      }
-  }
-
-  // 4. Función dinámica para LEER los posts de TODOS los usuarios de internet
-  async function renderFeed() {
-      const container = document.getElementById('feed-container');
-      container.innerHTML = '';
-
-      // Trae todas las publicaciones guardadas por cualquier persona en internet
-      const { data: publicaciones, error } = await supabase
-        .from('publicaciones')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (publicaciones) {
-          publicaciones.forEach(post => {
-              // Aquí usas tu misma lógica de diseño (.card) para pintarlos en pantalla
-              container.appendChild(createPostCard(post));
-          });
-      }
-  }
-</script>
-    <script>
-        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-        let allPosts = [];
-        let currentAuthMode = 'login';
-
-        window.onload = function() {
-            if (currentUser) {
-                loginSuccess();
-            } else {
-                navigateTo('auth');
-            }
+        // CONFIGURACIÓN DE TU PROYECTO (Copia esto desde tu consola de Firebase)
+        const firebaseConfig = {
+          apiKey: "AIzaSyAevve9w-gBHcX53v22enbwvgovis-CA3o",
+          authDomain: "nexus-app-877e1.firebaseapp.com",
+          projectId: "nexus-app-877e1",
+          storageBucket: "nexus-app-877e1.firebasestorage.app",
+          messagingSenderId: "665380339194",
+          appId: "1:665380339194:web:9b5e292e04c2e355e5f843",
+          measurementId: "G-6HLVHNBZHN"
         };
 
+        // Inicializar servicios
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Variables globales de estado
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        let allPosts = [];
+
+        // Exponer funciones globales que el HTML necesita ejecutar mediante los onclick
+        window.navigateTo = navigateTo;
+        window.handleAuth = handleAuth;
+        window.createPost = createPost;
+        window.addValue = addValue;
+        window.filterPosts = filterPosts;
+        window.logout = logout;
+
+        // Comprobación de arranque
+        if (currentUser) loginSuccess();
+        else navigateTo('auth');
+
         function navigateTo(view) {
-            if (!currentUser && view !== 'auth') return;
-            
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            
             document.getElementById(`view-${view}`).classList.add('active');
-            if (view !== 'auth') {
-                document.getElementById(`nav-${view}`).classList.add('active');
-            }
+            if (view !== 'auth') document.getElementById(`nav-${view}`).classList.add('active');
 
             if (view === 'home') loadFeed();
             if (view === 'profile') loadProfile();
-            if (view === 'search') filterPosts();
-        }
-
-        function switchAuthTab(mode) {
-            currentAuthMode = mode;
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            if (mode === 'login') {
-                document.getElementById('tab-login').classList.add('active');
-                document.getElementById('group-username').style.display = 'none';
-                document.getElementById('auth-submit-btn').innerText = 'Entrar al Espacio';
-            } else {
-                document.getElementById('tab-register').classList.add('active');
-                document.getElementById('group-username').style.display = 'block';
-                document.getElementById('auth-submit-btn').innerText = 'Comenzar en Nexus';
-            }
         }
 
         function handleAuth(e) {
             e.preventDefault();
-            const username = document.getElementById('auth-user').value || '@anonimo';
-            currentUser = { username: username.startsWith('@') ? username : '@' + username };
+            let user = document.getElementById('auth-user').value;
+            currentUser = { username: user.startsWith('@') ? user : '@' + user };
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
             loginSuccess();
         }
@@ -307,96 +222,99 @@
 
         function logout() {
             localStorage.removeItem('currentUser');
-            currentUser = null;
-            document.getElementById('nav-menu').style.display = 'none';
-            document.getElementById('safe-badge').style.display = 'block';
-            switchAuthTab('login');
-            navigateTo('auth');
+            window.location.reload();
         }
 
+        // LEER DE FIREBASE (Para todos los usuarios 24/7)
         async function loadFeed() {
-            const response = await fetch('/api/publicaciones');
-            allPosts = await response.json();
-            
             const container = document.getElementById('feed-container');
-            container.innerHTML = '';
-            allPosts.forEach(post => container.appendChild(createPostCard(post)));
-        }
+            
+            try {
+                // Hacemos una query ordenada por la fecha de creación descending
+                const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                allPosts = [];
+                querySnapshot.forEach((doc) => {
+                    allPosts.push({ id: doc.id, ...doc.data() });
+                });
 
-        function createPostCard(post) {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <div class="post-header">
-                    <div class="user-info">
-                        <div class="avatar"></div>
-                        <div>
-                            <div class="username">${post.user}</div>
-                            <div class="time">${post.time}</div>
+                container.innerHTML = '';
+                if(allPosts.length === 0) {
+                    container.innerHTML = '<p style="text-align:center; color:gray;">No hay reflexiones compartidas aún. ¡Sé el primero!</p>';
+                    return;
+                }
+
+                allPosts.forEach(post => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="post-header"><span class="username">${post.user}</span></div>
+                        <div class="post-content">${post.text}</div>
+                        <div class="values-tags">
+                            <span class="tag">🌱 Aporta</span>
+                            <span class="tag" style="background:#ffeeba; color:#856404;">✨ Valoraciones: ${post.values || 0}</span>
                         </div>
-                    </div>
-                </div>
-                <div class="post-content">${post.text}</div>
-                <div class="values-tags">
-                    ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    <span class="tag" style="background-color: #ffeeba; color: #856404;">✨ Valores: ${post.valuesCount}</span>
-                </div>
-                <div class="actions-bar">
-                    <button class="action-btn" onclick="addValue(${post.id})">🌿 + Valorar</button>
-                    <button class="action-btn" onclick="alert('Moderación ética activa.')">💬 Conversar</button>
-                </div>
-            `;
-            return card;
+                        <div class="actions-bar">
+                            <button class="action-btn" onclick="addValue('${post.id}')">🌿 + Reaccionar con Valor</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                container.innerHTML = "Asegúrate de configurar las reglas públicas en Firestore.";
+                console.error(err);
+            }
         }
 
+        // GUARDAR EN FIREBASE (En la colección "posts")
         async function createPost(e) {
             e.preventDefault();
             const input = document.getElementById('new-post-text');
-            
-            await fetch('/api/publicaciones', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user: currentUser.username, text: input.value })
+
+            try {
+                await addDoc(collection(db, "posts"), {
+                    user: currentUser.username,
+                    text: input.value,
+                    values: 0,
+                    createdAt: Date.now() // Guardamos timestamp para ordenar correctamente
+                });
+                input.value = '';
+                loadFeed();
+            } catch (err) {
+                alert("Error al guardar la publicación.");
+            }
+        }
+
+        // REACCIONAR / ACTUALIZAR EN FIREBASE
+        async function addValue(postId) {
+            const postRef = doc(db, "posts", postId);
+            // Incrementamos de forma atómica el campo "values" en 1 en la base de datos
+            await updateDoc(postRef, {
+                values: increment(1)
             });
-            input.value = '';
+
             loadFeed();
         }
 
-        async function addValue(id) {
-            await fetch(`/api/publicaciones/${id}/valorar`, { method: 'POST' });
-            if (document.getElementById('view-home').classList.contains('active')) loadFeed();
-            if (document.getElementById('view-profile').classList.contains('active')) loadProfile();
-            if (document.getElementById('view-search').classList.contains('active')) filterPosts();
-        }
-
         function filterPosts() {
-            const query = document.getElementById('search-input').value.toLowerCase();
+            const queryText = document.getElementById('search-input').value.toLowerCase();
             const container = document.getElementById('search-results');
             container.innerHTML = '';
-            const filtered = allPosts.filter(p => p.text.toLowerCase().includes(query));
-            filtered.forEach(post => container.appendChild(createPostCard(post)));
-        }
-
-        function setSearch(keyword) {
-            document.getElementById('search-input').value = keyword;
-            filterPosts();
+            const filtered = allPosts.filter(p => p.text.toLowerCase().includes(queryText));
+            filtered.forEach(post => {
+                container.innerHTML += `<div class="card"><strong>${post.user}</strong><p>${post.text}</p></div>`;
+            });
         }
 
         function loadProfile() {
             document.getElementById('profile-display-username').innerText = currentUser.username;
-            document.getElementById('profile-display-name').innerText = currentUser.username.replace('@', '');
-            
-            const myPosts = allPosts.filter(p => p.user === currentUser.username);
-            document.getElementById('stat-posts').innerText = myPosts.length;
-            document.getElementById('stat-values').innerText = myPosts.reduce((acc, p) => acc + p.valuesCount, 0);
-
             const container = document.getElementById('profile-posts-container');
             container.innerHTML = '';
-            if (myPosts.length === 0) {
-                container.innerHTML = '<p style="color:gray; text-align:center;">Aún no has compartido reflexiones.</p>';
-            } else {
-                myPosts.forEach(post => container.appendChild(createPostCard(post)));
-            }
+            const myPosts = allPosts.filter(p => p.user === currentUser.username);
+            myPosts.forEach(post => {
+                container.innerHTML += `<div class="card"><p>${post.text}</p></div>`;
+            });
         }
     </script>
 </body>
